@@ -1,4 +1,5 @@
 import { IsString, IsPhoneNumber, IsNotEmpty, IsOptional, IsEnum } from "class-validator";
+import { ProjectType } from "@prisma/client";
 
 export enum FormStatus {
 	novo = "novo",
@@ -33,9 +34,9 @@ export class CreateFormDto {
 	@IsNotEmpty()
 	budget: string;
 
-	@IsString()
+	@IsEnum(ProjectType)
 	@IsNotEmpty()
-	projectType: string;
+	projectType: ProjectType;
 
 	@IsString()
 	@IsOptional()

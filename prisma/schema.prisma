@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -8,11 +7,17 @@ datasource db {
 }
 
 enum FormStatus {
-    novo
-    respondido
-    em_andamento
-    cancelado
-    finalizado
+  NOVO
+  RESPONDIDO
+  EM_ANDAMENTO
+  CANCELADO
+  FINALIZADO
+}
+
+enum ProjectType {
+  LANDING_PAGE
+  DASHBOARD
+  OUTRO
 }
 
 model Form {
@@ -23,8 +28,8 @@ model Form {
   projectDescription String
   deadline           String
   budget             String
-  projectType        String
+  projectType        ProjectType
   extraDetails       String?
-  status             FormStatus @default(novo)
+  status             FormStatus @default(NOVO)
   createdAt          DateTime   @default(now())
 }
