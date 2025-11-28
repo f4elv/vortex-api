@@ -1,13 +1,24 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
+import { envValidationSchema } from "src/config/env.validation"
 import { APP_GUARD } from "@nestjs/core";
 import { UserModule } from "./user/user.module";
 import { AdminModule } from "./admin/admin.module";
 import { AuthModule } from "./auth/auth.module";
+import { abort } from "process";
 
 @Module({
-	imports: [ConfigModule.forRoot({ isGlobal: true }), ThrottlerModule.forRoot([{ ttl: 60000, limit: 3 }]), UserModule, AdminModule, AuthModule],
+	imports: [
+		ConfigModule.forRoot({
+			isGlobal: true, 
+			validationSchema: envValidationSchema, 
+			validationOptions: { 
+				abortEarly: true 
+			} 
+		}), 
+		ThrottlerModule.forRoot([{ ttl: 60000, limit: 3 }]),
+		UserModule, AdminModule, AuthModule],
 	controllers: [],
 	providers: [
 		{
