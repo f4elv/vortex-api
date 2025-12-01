@@ -9,7 +9,6 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 	}
 
 	canActivate(context: ExecutionContext) {
-		// Permite rotas públicas marcadas com @Public()
 		const isPublic = this.reflector.getAllAndOverride<boolean>("isPublic", [context.getHandler(), context.getClass()]);
 
 		if (isPublic) {

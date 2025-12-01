@@ -18,4 +18,10 @@ export class AuthController {
 	verify() {
 		return { message: "Token válido", authenticated: true };
 	}
-}
+
+	@UseGuards(JwtAuthGuard)
+	@Post("logout")
+	logout () {
+		return { message: "Logout realizado com sucesso"}
+	}
+} 

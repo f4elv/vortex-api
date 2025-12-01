@@ -6,7 +6,6 @@ import { APP_GUARD } from "@nestjs/core";
 import { UserModule } from "./user/user.module";
 import { AdminModule } from "./admin/admin.module";
 import { AuthModule } from "./auth/auth.module";
-import { abort } from "process";
 
 @Module({
 	imports: [
@@ -17,7 +16,7 @@ import { abort } from "process";
 				abortEarly: true 
 			} 
 		}), 
-		ThrottlerModule.forRoot([{ ttl: 60000, limit: 3 }]),
+		ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
 		UserModule, AdminModule, AuthModule],
 	controllers: [],
 	providers: [
