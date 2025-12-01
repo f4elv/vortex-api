@@ -1,4 +1,13 @@
-import { Controller, Get, Patch, Param, Body, UseGuards } from "@nestjs/common";
+import { 
+  Controller, 
+  Get, 
+  Patch, 
+  Param, 
+  Body, 
+  UseGuards, 
+  Logger, 
+  InternalServerErrorException 
+} from "@nestjs/common";
 import { AdminService } from "./admin.service";
 import { UpdateStatusDto } from "./dtos/update-status.dto";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
@@ -6,30 +15,77 @@ import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 @Controller("admin")
 @UseGuards(JwtAuthGuard)
 export class AdminController {
-	constructor(private adminService: AdminService) {}
+  private readonly logger = new Logger(AdminController.name);
 
-	@Get("forms")
-	async FindAllForms() {
-		return this.adminService.FindAllForms();
-	}
+  constructor(private adminService: AdminService) {}
 
-	@Get(":formId")
-	async FindFormById(@Param("formId") formId: string) {
-		return this.adminService.FindFormById(formId);
-	}
+  @Get("forms")
+  async FindAllForms() {
+    try {
+      this.logger.log("Listando todos os formulários");
+      return this.adminService.FindAllForms();
+    } catch (error) {
+      this.logger.error(`Erro ao listar formulários: ${error.message}`, error.stack);
+      throw new InternalServerErrorException("Erro ao listar formulários");
+    }
+  }
 
-	@Get("status/:status")
-	async FindFormsByStatus(@Param("status") status: string) {
-		return this.adminService.FindFormsByStatus(status as any);
-	}
+  @Get(":formId")
+  async FindFormById(@Param("formId") formId: string) {
+    try {
+      this.logger.log(`Buscando formulário ${formId}`);
+      return this.adminService.FindFormById(formId);
+    } catch (error) {
+      this.logger.error(
+        `Erro ao buscar formulário ${formId}: ${error.message}`,
+        error.stack
+      );
+      throw new InternalServerErrorException("Erro ao buscar formulário");
+    }
+  }
 
-	@Get("project-type/:projectType")
-	async FindFormsByProjectType(@Param("projectType") projectType: string) {
-		return this.adminService.FindFormsByProjectType(projectType as any);
-	}
+  @Get("status/:status")
+  async FindFormsByStatus(@Param("status") status: string) {
+    try {
+      this.logger.log(`Buscando formulários com status ${status}`);
+      return this.adminService.FindFormsByStatus(status as any);
+    } catch (error) {
+      this.logger.error(
+        `Erro ao buscar por status ${status}: ${error.message}`,
+        error.stack
+      );
+      throw new InternalServerErrorException("Erro ao buscar por status");
+    }
+  }
 
-	@Patch(":formId/status")
-	async UpdateFormStatus(@Param("formId") formId: string, @Body() updateStatusDto: UpdateStatusDto) {
-		return this.adminService.UpdateFormStatus(formId, updateStatusDto);
-	}
+  @Get("project-type/:projectType")
+  async FindFormsByProjectType(@Param("projectType") projectType: string) {
+    try {
+      this.logger.log(`Buscando formulários por tipo de projeto ${projectType}`);
+      return this.adminService.FindFormsByProjectType(projectType as any);
+    } catch (error) {
+      this.logger.error(
+        `Erro ao buscar por tipo do projeto ${projectType}: ${error.message}`,
+        error.stack
+      );
+      throw new InternalServerErrorException("Erro ao buscar por tipo do projeto");
+    }
+  }
+
+  @Patch(":formId/status")
+  async UpdateFormStatus(
+    @Param("formId") formId: string, 
+    @Body() updateStatusDto: UpdateStatusDto
+  ) {
+    try {
+      this.logger.log(`Atualizando status do formulário ${formId}`);
+      return this.adminService.UpdateFormStatus(formId, updateStatusDto);
+    } catch (error) {
+      this.logger.error(
+        `Erro ao atualizar status do formulário ${formId}: ${error.message}`,
+        error.stack
+      );
+      throw new InternalServerErrorException("Erro ao atualizar status");
+    }
+  }
 }
