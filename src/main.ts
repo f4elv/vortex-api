@@ -16,7 +16,11 @@ async function bootstrap() {
 
 	app.use(helmet());
 	app.enableCors({
-  		origin: process.env.FRONTEND_URL || 'https://vortex-seven-rouge.vercel.app/',
+  		origin: [
+    		'https://vortexstudio.com.br',
+    		'https://www.vortexstudio.com.br',
+    		'https://vortex-seven-rouge.vercel.app'
+  		],
   		credentials: true,
   		methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   		allowedHeaders: ['Content-Type', 'Authorization'],
