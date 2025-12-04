@@ -15,13 +15,12 @@ async function bootstrap() {
 	});
 
 	app.use(helmet());
-	app.enableCors();
-	// app.enableCors({
-  	// 	origin: process.env.FRONTEND_URL || 'https://seu-dominio.com',
-  	// 	credentials: true,
-  	// 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-  	// 	allowedHeaders: ['Content-Type', 'Authorization'],
-	// });
+	app.enableCors({
+  		origin: process.env.FRONTEND_URL || 'https://seu-dominio.com',
+  		credentials: true,
+  		methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  		allowedHeaders: ['Content-Type', 'Authorization'],
+	});
 
 	app.useGlobalPipes(
 		new ValidationPipe({
